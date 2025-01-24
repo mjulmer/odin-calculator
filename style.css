@@ -4,11 +4,12 @@
   font-size: 45px;
   font-family: "Courier New", "Courier", monospace;
   border-style: solid;
+  border-width: 2px;
   border-color: lightblue;
 }
 
 .input-box {
-  width: 528px;
+  width: 532px;
   height: 120px;
   font-size: 80px;
   display: flex;
@@ -28,9 +29,8 @@
   height: 134px;
 }
 
-.medium-button {
-  width: 201px;
-  height: 134px;
+.clear-button {
+  font-size: 35px;
 }
 
 .operator {

@@ -1,6 +1,19 @@
-input {
+.small-button,
+.medium-button,
+.input-box {
+  font-size: 45px;
+  font-family: "Courier New", "Courier", monospace;
+  border-style: solid;
+  border-color: lightblue;
+}
+
+.input-box {
   width: 528px;
   height: 120px;
+  font-size: 80px;
+  display: flex;
+  justify-content: right;
+  align-items: center;
 }
 
 .calc-container {
@@ -8,15 +21,6 @@ input {
   flex-wrap: wrap;
   width: 536px;
   height: 402px;
-}
-
-.small-button,
-.medium-button,
-input {
-  font-size: large;
-  font-family: "Courier New", "Courier", monospace;
-  border-style: solid;
-  border-color: lightblue;
 }
 
 .small-button {

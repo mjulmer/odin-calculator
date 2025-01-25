@@ -1,16 +1,5 @@
 "use strict";
 
-// Number obtained by manually entering digits until the display was filled.
-// Is this hacky? Yes. Will it need to be changed every time the font size or
-// display width changes? Also yes. 
-// The alternative would be to declare the font size of the display as the
-// root font size and use em units to define everything, then redefine the 
-// button font size. If this were a production project, I would do that.
-// But it's not. So I'm going to keep the constant.
-const MAX_DISPLAY_DIGITS = 11;
-// ugh users can just keep multiplying and hit overflow :((
-const MAX_ENTRY_DIGITS = 8;
-
 const add = function (a, b) {
   return a + b;
 };
@@ -31,8 +20,8 @@ function operate(firstOperand, secondOperand, operator) {
   return operator(firstOperand, secondOperand);
 }
 
-let firstOperand = 0;
-let secondOperand = 0;
+let firstOperand = undefined;
+let secondOperand = undefined;
 let operator = undefined;
 
 let currentTextEntry = "";
@@ -49,27 +38,51 @@ numberButtons.forEach((button) =>
 document.querySelectorAll(".operator").forEach((button) =>
   button.addEventListener("click", () => {
     switch (button.textContent) {
-        case '+':
-            operator = add;
-            break;
-        case '-':
-            operator = subtract;
-            break;
-        case 'X':
-            operator = multiply;
-            break;
-        case '/':
-            operator = divide;
-            break;
-        default:
-            operator = undefined;
-            log.console.error("Unexpected operator button.");
+      case "+":
+        operator = add;
+        break;
+      case "-":
+        operator = subtract;
+        break;
+      case "X":
+        operator = multiply;
+        break;
+      case "/":
+        operator = divide;
+        break;
+      default:
+        operator = undefined;
+        log.console.error("Unexpected operator button.");
     }
-    firstOperand = currentTextEntry;
+    firstOperand = parseInt(currentTextEntry);
+    currentTextEntry = "";
+    inputText.textContent = "";
   })
 );
 
-document.querySelector(".clear-button").addEventListener("click", () => {
+document.querySelector(".clear-button").addEventListener("click", () => resetLogicAndDisplay());
+
+document.querySelector(".equals-button").addEventListener("click", () => {
+    secondOperand = currentTextEntry === "" ? undefined : parseInt(currentTextEntry);
+  // If nothing has been entered, or only one number has been entered, do nothing.
+  if (firstOperand === undefined || secondOperand === undefined || operator === undefined) {
+    return;
+  }
+ 
+  firstOperand = operator(firstOperand, secondOperand);
+  // This supports clearing the display instead of appending digits to the
+  // previous answer, if the user enters a digit next
+  currentTextEntry = ""
+  inputText.textContent = firstOperand;
+
+  operator = undefined;
+});
+
+
+function resetLogicAndDisplay() {
     currentTextEntry = "";
-    inputText.textContent = currentTextEntry;
-  });
+    inputText.textContent = "";
+    firstOperand = undefined;
+    secondOperand = undefined;
+    operator = undefined;
+}

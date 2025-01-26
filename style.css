@@ -17,6 +17,14 @@
   align-items: center;
 }
 
+/* Left overflow clip solution from https://stackoverflow.com/a/69010726 */
+.input-text{
+  display: flex;
+  justify-content: flex-end;
+  white-space: nowrap;
+  overflow: hidden;
+}
+
 .calc-container {
   display: flex;
   flex-wrap: wrap;

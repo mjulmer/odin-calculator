@@ -30,16 +30,86 @@ let operator = undefined;
 let currentTextEntry = "";
 
 const inputText = document.querySelector(".input-text");
+
 let numberButtons = document.querySelectorAll(".number");
 numberButtons.forEach((button) =>
   button.addEventListener("click", () => {
-    currentTextEntry = currentTextEntry + button.textContent;
-    inputText.textContent = currentTextEntry;
+    currentTextEntry += button.textContent;
+    inputText.textContent += button.textContent;
   })
 );
 
+document
+  .querySelector(".clear-button")
+  .addEventListener("click", () => resetLogicAndDisplay());
+
+document.querySelector(".equals-button").addEventListener("click", () => {
+  secondOperand =
+    currentTextEntry === "" ? undefined : parseInt(currentTextEntry);
+  // If nothing has been entered, or only one number has been entered, do nothing.
+  if (
+    firstOperand === undefined ||
+    secondOperand === undefined ||
+    operator === undefined
+  ) {
+    return;
+  }
+
+  performCalculationAndReadyDisplay();
+  // This supports clearing the display instead of appending digits to the
+  // previous answer, if the user enters a digit next
+  currentTextEntry = "";
+  secondOperand = undefined;
+  operator = undefined;
+});
+
+function resetLogicAndDisplay() {
+  currentTextEntry = "";
+  inputText.textContent = "";
+  firstOperand = undefined;
+  secondOperand = undefined;
+  operator = undefined;
+}
+
+function performCalculationAndReadyDisplay() {
+  console.log(`a ${firstOperand} b ${secondOperand}`);
+  firstOperand = operator(firstOperand, secondOperand);
+  inputText.textContent = firstOperand;
+  // This supports the case where a second operator press triggers the
+  // computation.
+  currentTextEntry = firstOperand;
+  secondOperand = undefined;
+}
+
 document.querySelectorAll(".operator").forEach((button) =>
   button.addEventListener("click", () => {
+    // If the user just computed a calculation, we can use the result as
+    // firstOperand and take input for the operator of the next calculation.
+    if (currentTextEntry == "") {
+      currentTextEntry = inputText.textContent;
+      firstOperand = parseInt(inputText.textContent) ;
+      secondOperand = undefined;
+    }
+
+    const knownOperators = ["+", "-", "X", "/"];
+    if (knownOperators.includes(inputText.textContent.at(-1))) {
+      return;
+    }
+
+    // Check for the case where this is a second operator being added to an
+    // existing computation (to add a third operand). If so, compute and
+    // display the answer to that calculation.
+    if (
+      firstOperand !== undefined &&
+      operator !== undefined &&
+      inputText.textContent.at(-1) >= "0" &&
+      inputText.textContent.at(-1) <= "9"
+    ) {
+      secondOperand = parseInt(currentTextEntry);
+      performCalculationAndReadyDisplay();
+      secondOperand = undefined;
+    }
+
     switch (button.textContent) {
       case "+":
         operator = add;
@@ -55,37 +125,13 @@ document.querySelectorAll(".operator").forEach((button) =>
         break;
       default:
         operator = undefined;
-        log.console.error("Unexpected operator button.");
+        console.error("Unexpected operator button.");
     }
-    firstOperand = parseInt(currentTextEntry);
+
+    if (firstOperand === undefined) {
+      firstOperand = parseInt(inputText.textContent);
+    }
+    inputText.textContent = currentTextEntry + button.textContent;
     currentTextEntry = "";
-    inputText.textContent = "";
   })
 );
-
-document.querySelector(".clear-button").addEventListener("click", () => resetLogicAndDisplay());
-
-document.querySelector(".equals-button").addEventListener("click", () => {
-    secondOperand = currentTextEntry === "" ? undefined : parseInt(currentTextEntry);
-  // If nothing has been entered, or only one number has been entered, do nothing.
-  if (firstOperand === undefined || secondOperand === undefined || operator === undefined) {
-    return;
-  }
- 
-  firstOperand = operator(firstOperand, secondOperand);
-  // This supports clearing the display instead of appending digits to the
-  // previous answer, if the user enters a digit next
-  currentTextEntry = ""
-  inputText.textContent = firstOperand;
-
-  operator = undefined;
-});
-
-
-function resetLogicAndDisplay() {
-    currentTextEntry = "";
-    inputText.textContent = "";
-    firstOperand = undefined;
-    secondOperand = undefined;
-    operator = undefined;
-}

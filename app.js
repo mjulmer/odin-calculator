@@ -74,7 +74,6 @@ document.querySelector(".equals-button").addEventListener("click", () => {
 });
 
 function resetLogicAndDisplay() {
-  mulmer@veridical:~/code/odin/odin-calculator$ git add app.js 
   currentTextEntry = "";
   inputText.textContent = "";
   firstOperand = undefined;

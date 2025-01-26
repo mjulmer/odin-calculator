@@ -97,10 +97,11 @@ document.querySelectorAll(".operator").forEach((button) =>
   button.addEventListener("click", () => {
     // If the user just computed a calculation, we can use the result as
     // firstOperand and take input for the operator of the next calculation.
-    if (currentTextEntry == "") {
+    if (lastActionWasEquals) {
       currentTextEntry = inputText.textContent;
       firstOperand = parseInt(inputText.textContent) ;
       secondOperand = undefined;
+      lastActionWasEquals = false;
     }
 
     const knownOperators = ["+", "-", "X", "/"];

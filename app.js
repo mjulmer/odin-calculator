@@ -26,6 +26,9 @@ function operate(firstOperand, secondOperand, operator) {
 let firstOperand = undefined;
 let secondOperand = undefined;
 let operator = undefined;
+// Used to determine if the display should be cleared on a digit press (since
+// digits should not be appended to an existing answer)
+let lastActionWasEquals = false;
 
 let currentTextEntry = "";
 
@@ -34,8 +37,16 @@ const inputText = document.querySelector(".input-text");
 let numberButtons = document.querySelectorAll(".number");
 numberButtons.forEach((button) =>
   button.addEventListener("click", () => {
+    // If currentTextEntry is empty, the user just completed a calculation with
+    // equals and new digits should not be appended.
+    if (lastActionWasEquals) {
+      inputText.textContent = button.textContent;
+      lastActionWasEquals = false;
+      firstOperand = undefined;
+    } else {
+      inputText.textContent += button.textContent;
+    }
     currentTextEntry += button.textContent;
-    inputText.textContent += button.textContent;
   })
 );
 
@@ -58,15 +69,18 @@ document.querySelector(".equals-button").addEventListener("click", () => {
   performCalculationAndReadyDisplay();
   // This supports clearing the display instead of appending digits to the
   // previous answer, if the user enters a digit next
+  lastActionWasEquals = true;
   currentTextEntry = "";
 });
 
 function resetLogicAndDisplay() {
+  mulmer@veridical:~/code/odin/odin-calculator$ git add app.js 
   currentTextEntry = "";
   inputText.textContent = "";
   firstOperand = undefined;
   secondOperand = undefined;
   operator = undefined;
+  lastActionWasEquals = false;
 }
 
 function performCalculationAndReadyDisplay() {

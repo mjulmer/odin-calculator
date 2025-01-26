@@ -59,8 +59,6 @@ document.querySelector(".equals-button").addEventListener("click", () => {
   // This supports clearing the display instead of appending digits to the
   // previous answer, if the user enters a digit next
   currentTextEntry = "";
-  secondOperand = undefined;
-  operator = undefined;
 });
 
 function resetLogicAndDisplay() {
@@ -79,6 +77,7 @@ function performCalculationAndReadyDisplay() {
   // computation.
   currentTextEntry = firstOperand;
   secondOperand = undefined;
+  operator = undefined;
 }
 
 document.querySelectorAll(".operator").forEach((button) =>
@@ -107,7 +106,6 @@ document.querySelectorAll(".operator").forEach((button) =>
     ) {
       secondOperand = parseInt(currentTextEntry);
       performCalculationAndReadyDisplay();
-      secondOperand = undefined;
     }
 
     switch (button.textContent) {

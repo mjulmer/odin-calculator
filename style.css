@@ -17,6 +17,14 @@
   align-items: center;
 }
 
+.input-text{
+  width: 532px;
+  overflow: hidden;
+  /* This ensures overflow text is clipped on the left. */
+  direction: rtl;
+  text-overflow: ellipsis;
+}
+
 .calc-container {
   display: flex;
   flex-wrap: wrap;

@@ -16,7 +16,9 @@ const divide = function (a, b) {
   if (b == 0) {
     return NaN;
   }
-  return a / b;
+  const result = a / b;
+  // Round all decimals to five digits
+  return Math.round(result * 10 ** 5) / 10 ** 5;
 };
 
 function operate(firstOperand, secondOperand, operator) {
@@ -39,7 +41,7 @@ numberButtons.forEach((button) =>
   button.addEventListener("click", () => {
     // If currentTextEntry is empty, the user just completed a calculation with
     // equals and new digits should not be appended.
-    if (lastActionWasEquals) {
+    if (inputText.textContent.length >= inputText.textContent - 1) {
       inputText.textContent = button.textContent;
       lastActionWasEquals = false;
       firstOperand = undefined;
@@ -56,7 +58,7 @@ document
 
 document.querySelector(".equals-button").addEventListener("click", () => {
   secondOperand =
-    currentTextEntry === "" ? undefined : parseInt(currentTextEntry);
+    currentTextEntry === "" ? undefined : Number(currentTextEntry);
   // If nothing has been entered, or only one number has been entered, do nothing.
   if (
     firstOperand === undefined ||
@@ -99,7 +101,7 @@ document.querySelectorAll(".operator").forEach((button) =>
     // firstOperand and take input for the operator of the next calculation.
     if (lastActionWasEquals) {
       currentTextEntry = inputText.textContent;
-      firstOperand = parseInt(inputText.textContent) ;
+      firstOperand = Number(inputText.textContent);
       secondOperand = undefined;
       lastActionWasEquals = false;
     }
@@ -118,7 +120,7 @@ document.querySelectorAll(".operator").forEach((button) =>
       inputText.textContent.at(-1) >= "0" &&
       inputText.textContent.at(-1) <= "9"
     ) {
-      secondOperand = parseInt(currentTextEntry);
+      secondOperand = Number(currentTextEntry);
       performCalculationAndReadyDisplay();
     }
 
@@ -141,7 +143,7 @@ document.querySelectorAll(".operator").forEach((button) =>
     }
 
     if (firstOperand === undefined) {
-      firstOperand = parseInt(inputText.textContent);
+      firstOperand = Number(inputText.textContent);
     }
     inputText.textContent = currentTextEntry + button.textContent;
     currentTextEntry = "";
